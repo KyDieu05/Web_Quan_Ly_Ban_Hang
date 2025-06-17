@@ -1,0 +1,37 @@
+﻿@model QuanLyNhaHang.Models.NguyenLieu
+
+@{
+    ViewBag.Title = "Chi tiết nguyên liệu";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="mb-4">Chi tiết nguyên liệu</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">Mã nguyên liệu:</dt>
+            <dd class="col-sm-8">@Model.MaNguyenLieu</dd>
+
+            <dt class="col-sm-4">Tên nguyên liệu:</dt>
+            <dd class="col-sm-8">@Model.TenNguyenLieu</dd>
+
+            <dt class="col-sm-4">Số lượng hiện còn:</dt>
+            <dd class="col-sm-8">@Model.SoLuongHienCon</dd>
+
+            <dt class="col-sm-4">Giá nhập cuối:</dt>
+            <dd class="col-sm-8">@Model.GiaNhapCuoi.ToString("N0") VND</dd>
+
+            <dt class="col-sm-4">Loại nguyên liệu:</dt>
+            <dd class="col-sm-8">@Model.LoaiNguyenLieu?.TenLNL</dd>
+
+            <dt class="col-sm-4">Ghi chú:</dt>
+            <dd class="col-sm-8">@Model.GhiChu</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a href="@Url.Action("CapNhatNguyenLieu", "NguyenLieu", new { id = Model.MaNguyenLieu })" class="btn btn-warning">Cập nhật</a>
+    <a href="@Url.Action("DSNguyenLieu", "NguyenLieu")" class="btn btn-secondary">Quay lại</a>
+</div>

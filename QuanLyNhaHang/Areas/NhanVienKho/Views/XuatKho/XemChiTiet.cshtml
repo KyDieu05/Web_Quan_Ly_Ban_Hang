@@ -1,0 +1,46 @@
+﻿@model List<QuanLyNhaHang.Models.NguyenLieuXuat>
+
+@{
+    ViewBag.Title = "Chi tiết phiếu xuất kho";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="mb-4">Chi tiết phiếu xuất kho số @ViewBag.MaXuatKho</h2>
+
+<table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>STT</th>
+            <th>Mã nguyên liệu</th>
+            <th>Tên nguyên liệu</th>
+            <th>Số lượng xuất</th>
+            <th>Ghi chú</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td>@item.MaNguyenLieu_id</td>
+                    <td>@item.NguyenLieu?.TenNguyenLieu</td>
+                    <td>@item.SoLuongXuat</td>
+                </tr>
+                stt++;
+            }
+        }
+    </tbody>
+</table>
+
+<a href="@Url.Action("DSXuatKho", "XuatKho")" class="btn btn-secondary mt-3">
+    ← Quay lại danh sách phiếu xuất
+</a>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning mt-4 text-center">
+        Không có nguyên liệu nào được xuất trong phiếu này.
+    </div>
+}

@@ -1,0 +1,54 @@
+﻿@model List<QuanLyNhaHang.Areas.Admin.ViewModels.ThongKeDoanhThuViewModel>
+@{
+    ViewBag.Title = "Thống kê doanh thu 5 tháng gần nhất";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2 class="mb-4">Thống kê doanh thu 5 tháng gần nhất</h2>
+<canvas id="chartDoanhThu" width="800" height="400"></canvas>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const labels = @Html.Raw(Json.Encode(Model.Select(x => x.ThangNam)));
+        const data = @Html.Raw(Json.Encode(Model.Select(x => x.TongDoanhThu)));
+
+        const ctx = document.getElementById('chartDoanhThu').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Doanh thu (VNĐ)',
+                    data: data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let value = context.raw.toLocaleString('vi-VN') + ' đ';
+                                return ' ' + value;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString('vi-VN') + ' đ';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

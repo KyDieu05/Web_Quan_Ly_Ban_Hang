@@ -1,0 +1,45 @@
+﻿@model QuanLyNhaHang.Models.NguyenLieu
+
+@{
+    ViewBag.Title = "Thêm nguyên liệu mới";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="mb-4">Thêm nguyên liệu mới</h2>
+
+@using (Html.BeginForm("ThemNguyenLieu", "NguyenLieu", FormMethod.Post, new { @class = "needs-validation", novalidate = "novalidate" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.TenNguyenLieu)
+        @Html.TextBoxFor(model => model.TenNguyenLieu, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(model => model.TenNguyenLieu, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.SoLuongHienCon)
+        @Html.TextBoxFor(model => model.SoLuongHienCon, new { @class = "form-control", type = "number", step = "0.01", required = "required" })
+        @Html.ValidationMessageFor(model => model.SoLuongHienCon, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.GiaNhapCuoi)
+        @Html.TextBoxFor(model => model.GiaNhapCuoi, new { @class = "form-control", type = "number", step = "0.01", required = "required" })
+        @Html.ValidationMessageFor(model => model.GiaNhapCuoi, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.LabelFor(model => model.GhiChu)
+        @Html.TextAreaFor(model => model.GhiChu, new { @class = "form-control", rows = 3 })
+        @Html.ValidationMessageFor(model => model.GhiChu, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group mb-3">
+        @Html.Label("Loại nguyên liệu")
+        @Html.DropDownList("MaLNL_id", new SelectList(ViewBag.LoaiNguyenLieu as IEnumerable<QuanLyNhaHang.Models.LoaiNguyenLieu>, "MaLNL", "TenLNL"), "-- Chọn loại --", new { @class = "form-control", required = "required" })
+    </div>
+
+    <button type="submit" class="btn btn-success">Thêm nguyên liệu</button>
+    <a href="@Url.Action("DSNguyenLieu", "NguyenLieu")" class="btn btn-secondary">Hủy</a>
+}

@@ -1,0 +1,48 @@
+﻿@model List<QuanLyNhaHang.Models.XuatKho>
+
+@{
+    ViewBag.Title = "Danh sách phiếu xuất kho";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="mb-4">Danh sách phiếu xuất kho</h2>
+
+<table class="table table-bordered table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th>STT</th>
+            <th>Mã phiếu xuất</th>
+            <th>Ngày xuất</th>
+            <th>Số nguyên liệu</th>
+            <th>Chi tiết</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td>@item.MaXuatKho</td>
+                    <td>@item.NgayXuat?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.NguyenLieuXuats?.Count()</td>
+                    <td>
+                        <a class="btn btn-info btn-sm"
+                           href="@Url.Action("XemChiTiet", "XuatKho", new { id = item.MaXuatKho })">
+                            Xem chi tiết
+                        </a>
+                    </td>
+                </tr>
+                stt++;
+            }
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-warning mt-4 text-center">
+        Hiện chưa có phiếu xuất kho nào.
+    </div>
+}

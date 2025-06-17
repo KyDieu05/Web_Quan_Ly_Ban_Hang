@@ -1,0 +1,51 @@
+﻿@model IEnumerable<QuanLyNhaHang.Models.PhieuNhap>
+
+@{
+    ViewBag.Title = "Danh sách phiếu nhập kho";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="mb-4">Danh sách phiếu nhập kho</h2>
+
+<p>
+    <a href="@Url.Action("ThemPhieuNhap", "NhapKho")" class="btn btn-success">+ Thêm phiếu nhập mới</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Mã phiếu nhập</th>
+            <th>Ngày nhập</th>
+            <th>Nhà cung cấp</th>
+            <th>Nhân viên nhập</th>
+            <th>Tổng tiền (VNĐ)</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.MaPhieuNhap</td>
+                    <td>@item.NgayNhap?.ToString("dd/MM/yyyy")</td>
+                    <td>@item.NhaCC?.TenNCC</td>
+                    <td>@item.NhanVien?.HoTen</td>
+                    <td>@String.Format("{0:N0}", item.TongTien)</td>
+                    <td>
+                        <a href="@Url.Action("XemChiTiet", "NhapKho", new { id = item.MaPhieuNhap })" class="btn btn-info btn-sm">Xem</a>
+                        <a href="@Url.Action("CapNhatPhieuNhap", "NhapKho", new { id = item.MaPhieuNhap })" class="btn btn-warning btn-sm">Sửa</a>
+                        <a href="@Url.Action("XoaPhieuNhap", "NhapKho", new { id = item.MaPhieuNhap })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc chắn muốn xóa phiếu nhập này?');">Xóa</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="6" class="text-center text-danger">Không có phiếu nhập nào được tìm thấy.</td>
+            </tr>
+        }
+    </tbody>
+</table>

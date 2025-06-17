@@ -1,0 +1,71 @@
+﻿@model QuanLyNhaHang.Models.PhieuNhap
+
+@{
+    ViewBag.Title = "Cập nhật phiếu nhập";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+    var nhaCungCaps = ViewBag.DSNhaCC as List<QuanLyNhaHang.Models.NhaCC>;
+    var chiTiet = ViewBag.ChiTietPhieu as List<QuanLyNhaHang.Models.ChiTietPhieuNhap>;
+}
+
+<h2 class="mb-4">Cập nhật phiếu nhập</h2>
+
+@using (Html.BeginForm("CapNhatPhieuNhap", "NhapKho", FormMethod.Post))
+{
+    @Html.HiddenFor(m => m.MaPhieuNhap)
+
+    <div class="form-group">
+        <label>Ngày nhập</label>
+        <input type="date" class="form-control" name="NgayNhap" value="@Model.NgayNhap?.ToString(" yyyy-MM-dd")" required />
+    </div>
+
+    <div class="form-group">
+        <label>Nhà cung cấp</label>
+        <select class="form-control" name="MaNCC_id" required>
+            <option value="">-- Chọn nhà cung cấp --</option>
+            @foreach (var ncc in nhaCungCaps)
+            {
+                <option value="@ncc.MaNCC" @(ncc.MaNCC == Model.MaNCC_id ? "selected" : "")>@ncc.TenNCC</option>
+            }
+        </select>
+    </div>
+
+    <h4 class="mt-4">Chi tiết nguyên liệu</h4>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Tên nguyên liệu</th>
+                <th>Số lượng nhập</th>
+                <th>Giá nhập</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (chiTiet != null && chiTiet.Count > 0)
+            {
+                foreach (var ct in chiTiet)
+                {
+                    <tr>
+                        <td>@ct.NguyenLieu?.TenNguyenLieu</td>
+                        <td>
+                            <input type="number" step="0.01" class="form-control" name="SoLuongNhap_@ct.MaNguyenLieu_id" value="@ct.SoLuongNhap" required />
+                        </td>
+                        <td>
+                            <input type="number" step="100" class="form-control" name="GiaNhap_@ct.MaNguyenLieu_id" value="@ct.GiaNhap" required />
+                        </td>
+                        <td>@ct.ThanhTien?.ToString("N0")</td>
+                        @Html.Hidden("MaNguyenLieu_id", ct.MaNguyenLieu_id)
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr><td colspan="4" class="text-center text-danger">Không có nguyên liệu trong phiếu.</td></tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Lưu cập nhật</button>
+        <a href="@Url.Action("DSNhapKho", "NhapKho")" class="btn btn-secondary">Quay lại</a>
+    </div>
+}

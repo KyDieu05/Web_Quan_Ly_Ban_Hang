@@ -1,0 +1,105 @@
+﻿@model IEnumerable<QuanLyNhaHang.Models.ViewModels.MonAnChoViewModel>
+@{
+    ViewBag.Title = "Danh sách món ăn chờ";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<div class="container" id="DanhSachMonAn">
+    <div class="page-title-container">
+        <div class="row g-0">
+            <div class="col-auto mb-3 me-auto">
+                <div class="w-auto">
+                    <h1 class="mb-0 pb-0 display-4" id="title">Danh Sách Món Ăn Đang Chờ</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-2">
+        <div class="col-sm-12 col-md-5 col-lg-3 col-xxl-2 mb-1">
+            <div class="search-input-container w-100 shadow bg-foreground">
+                <input class="form-control search" placeholder="Tìm kiếm món ăn">
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-0">
+        <div class="col-12 mb-5">
+            <div id="checkboxTable">
+                <div class="mb-4 bg-transparent d-none d-lg-block">
+                    <div class="row g-0">
+                        <div class="col">
+                            <div class="ps-5 pe-4 h-100">
+                                <div class="row g-0 h-100 align-content-center">
+                                    <div class="col-lg-3"><div class="text-muted">Tên Món Ăn</div></div>
+                                    <div class="col-lg-2"><div class="text-muted">Đơn Giá</div></div>
+                                    <div class="col-lg-2"><div class="text-muted">Số Lượng Chờ</div></div>
+                                    <div class="col-lg-2"><div class="text-muted">Loại</div></div>
+                                    <div class="col-lg-2"><div class="text-muted">Chi Tiết</div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="list">
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                                <div class="card mb-2">
+                                    <div class="row g-0 h-100 sh-lg-9 position-relative">
+                                        <a href="/NhanVienKho/MonAn/XemChiTiet?iMaMonAn=@item.MaMonAn" class="col-auto position-relative">
+                                            <img src="~/Assets/img/AnhMonAn/@item.HinhAnh" alt="product" style="height:72px" class="card-img sw-11 h-100" />
+                                        </a>
+                                        <div class="col py-4">
+                                            <div class="ps-5 pe-4 h-100">
+                                                <div class="row g-0 h-100 align-content-center">
+                                                    <div class="col-lg-3 TenMonAn">
+                                                        <strong>@item.TenMonAn</strong>
+                                                        <div class="text-muted text-small">#@item.MaMonAn</div>
+                                                    </div>
+                                                    <div class="col-lg-2 DonGia">
+                                                        @String.Format("{0:0,0}", item.DonGia) vnđ
+                                                    </div>
+                                                    <div class="col-lg-2 SoLuongCho">
+                                                        @item.SoLuongCho
+                                                    </div>
+                                                    <div class="col-lg-2 LoaiMonAn">
+                                                        @item.TenLMA
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <a href="/NhanVienKho/MonAn/XemChiTiet?iMaMonAn=@item.MaMonAn" class="btn btn-sm btn-outline-primary">Chi tiết</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>                         
+                        }
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning text-center mt-4">
+                            Không có món ăn nào đang chờ chế biến.
+                        </div>
+                    }
+                </div>
+
+                <div class="w-100 d-flex justify-content-center mt-4">
+                    <ul class="pagination"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script lọc -->
+<script type="text/javascript">
+    var options = {
+        valueNames: ['TenMonAn', 'DonGia', 'SoLuongCho', 'LoaiMonAn'],
+        page: 10,
+        pagination: true
+    };
+    var userList = new List('DanhSachMonAn', options);
+</script>

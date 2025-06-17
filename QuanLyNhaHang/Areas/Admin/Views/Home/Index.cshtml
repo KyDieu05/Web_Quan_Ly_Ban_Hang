@@ -1,0 +1,160 @@
+﻿@{
+    ViewBag.Title = "Trang quản lý";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<h2>THỐNG KÊ NHÂN VIÊN</h2>
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white p-3">
+            <h4>Tổng Nhân Viên</h4>
+            <p>@ViewBag.TongNhanVien</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white p-3">
+            <h4>Đang Hoạt Động</h4>
+            <p>@ViewBag.NhanVienHoatDong</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-danger text-white p-3">
+            <h4>Bị Khóa</h4>
+            <p>@ViewBag.NhanVienBiKhoa</p>
+        </div>
+    </div>
+</div>
+
+<h3>Phân Loại Theo Vai Trò</h3>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-info text-white p-3">
+            <h5>Nhân Viên Phục Vụ</h5>
+            <p>@ViewBag.SoPhucVu</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-secondary text-white p-3">
+            <h5>Nhân Viên Kho</h5>
+            <p>@ViewBag.SoKho</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-dark p-3">
+            <h5>Nhân Viên Bếp</h5>
+            <p>@ViewBag.SoBep</p>
+        </div>
+    </div>
+</div>
+<br />
+@*Thống kê Doanh thu và tình trạng nhà hàng:*@
+
+
+<h2>TỔNG QUAN NHÀ HÀNG</h2>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card bg-warning text-dark p-3">
+            <h4>Doanh Thu Tổng</h4>
+            <p>@string.Format("{0:0,0}", ViewBag.DoanhThu) vnđ</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-info text-white p-3">
+            <h4>Số Lượng Hóa Đơn</h4>
+            <p>@ViewBag.SumHoaDon</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-secondary text-white p-3">
+            <h4>Tổng Món Ăn</h4>
+            <p>@ViewBag.SumMonAn</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card bg-primary text-white p-3">
+            <h4>Số Khu (Tầng)</h4>
+            <p>@ViewBag.Tang</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white p-3">
+            <h4>Tổng Số Bàn</h4>
+            <p>@ViewBag.SumBan</p>
+        </div>
+    </div>
+</div>
+@*Hóa đơn gần đây:*@
+<h3 class="mt-5">Hóa Đơn Gần Đây</h3>
+@if (ViewBag.HoaDon != null)
+{
+    var listHoaDon = ViewBag.HoaDon as IEnumerable<QuanLyNhaHang.Models.HoaDon>;
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Tên Khách Hàng</th>
+                    <th>Trạng Thái</th>
+                    <th>Tổng Tiền</th>
+                    <th>Giờ Tạo</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in listHoaDon)
+                {
+                    <tr>
+                        <td>
+                            <a href="/Admin/HoaDon/ChiTietHoaDon?iMaHoaDon=@item.MaHoaDon">@item.TenKhachHang</a>
+                        </td>
+                        <td>
+                            @(item.TrangThai == 0 ? "Đã Thanh Toán" : "Chưa Thanh Toán")
+                        </td>
+                        <td>
+                            @(item.TrangThai == 0 ? string.Format("{0:0,0} đ", item.TongTien) : "-")
+                        </td>
+                        <td>
+                            @(item.NgayTao.HasValue ? item.NgayTao.Value.ToString("HH:mm:ss") : "--:--:--")
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+@*Món ăn bán chạy: *@
+<h3 class="mt-5">Món Ăn Bán Chạy</h3>
+@if (ViewBag.BanChay != null)
+{
+    var listMonAn = ViewBag.BanChay as IEnumerable<QuanLyNhaHang.Models.MonAn>;
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Hình Ảnh</th>
+                    <th>Tên Món Ăn</th>
+                    <th>Loại</th>
+                    <th>Số Lượng Đã Bán</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in listMonAn)
+                {
+                    <tr>
+                        <td>
+                            <img src="~/Assets/img/AnhMonAn/@item.HinhAnh" width="60" />
+                        </td>
+                        <td>
+                            <a href="/Admin/MonAn/XemChiTiet?iMaMonAn=@item.MaMonAn">@item.TenMonAn</a>
+                        </td>
+                        <td>@item.LoaiMonAn.TenLMA</td>
+                        <td>@item.SoLuongDaBan</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,52 @@
+﻿@model QuanLyNhaHang.Models.PhieuNhap
+
+@{
+    ViewBag.Title = "Chi tiết phiếu nhập";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="mb-4">Chi tiết phiếu nhập @Model.MaPhieuNhap</h2>
+
+<div class="mb-3">
+    <strong>Ngày nhập:</strong> @Model.NgayNhap?.ToString("dd/MM/yyyy") <br />
+    <strong>Nhà cung cấp:</strong> @Model.NhaCC?.TenNCC <br />
+    <strong>Nhân viên thực hiện:</strong> @Model.NhanVien?.HoTenNV (@Model.TaiKhoanNV_id) <br />
+    <strong>Tổng tiền:</strong> @String.Format("{0:N0}", Model.TongTien) VNĐ
+</div>
+
+<hr />
+<h4>Danh sách nguyên liệu nhập</h4>
+
+<table class="table table-bordered table-hover mt-3">
+    <thead class="thead-dark">
+        <tr>
+            <th>STT</th>
+            <th>Tên nguyên liệu</th>
+            <th>Loại</th>
+            <th>Số lượng</th>
+            <th>Giá nhập</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int stt = 1;
+            foreach (var item in Model.ChiTietPhieuNhaps)
+            {
+                <tr>
+                    <td>@stt</td>
+                    <td>@item.NguyenLieu?.TenNguyenLieu</td>
+                    <td>@item.NguyenLieu?.LoaiNguyenLieu?.TenLNL</td>
+                    <td>@item.SoLuongNhap</td>
+                    <td>@String.Format("{0:N0}", item.GiaNhap)</td>
+                    <td>@String.Format("{0:N0}", item.ThanhTien)</td>
+                </tr>
+                stt++;
+            }
+        }
+    </tbody>
+</table>
+
+<div class="mt-4">
+    <a href="@Url.Action("DSNhapKho", "NhapKho")" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

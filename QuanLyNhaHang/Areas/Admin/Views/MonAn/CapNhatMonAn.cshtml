@@ -1,0 +1,138 @@
+﻿@using QuanLyNhaHang.Models
+@model MonAn
+@{
+    ViewBag.Title = "Cập Nhật Món Ăn";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+
+    IEnumerable<NhomMonAn> listNhomMonAn = ViewBag.NhomMonAn as IEnumerable<NhomMonAn>;
+    IEnumerable<LoaiMonAn> listLoaiMonAn = ViewBag.LoaiMonAn as IEnumerable<LoaiMonAn>;
+    IEnumerable<NguyenLieu> listNguyenLieu = ViewBag.NguyenLieu as IEnumerable<NguyenLieu>;
+    IEnumerable<ChiTietSanPham> listCTSP = ViewBag.ChiTietSanPham as IEnumerable<ChiTietSanPham>;
+}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<script>tinymce.init({ selector: 'textarea' });</script>
+
+<div class="container">
+    @using (Html.BeginForm("CapNhatMonAn", "MonAn", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+    {
+        @Html.HiddenFor(m => m.MaMonAn)
+
+        <h1 class="mb-4">Cập Nhật Món Ăn</h1>
+        <div class="row g-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Tên Món Ăn</label>
+                @Html.TextBoxFor(m => m.TenMonAn, new { @class = "form-control" })
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Đơn Giá</label>
+                @Html.TextBoxFor(m => m.DonGia, new { @class = "form-control", type = "number" })
+            </div>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Nhóm Món Ăn</label>
+                @Html.DropDownListFor(m => m.MaNMA_id, new SelectList(listNhomMonAn, "MaNMA", "TenNMA", Model.MaNMA_id), "-- Chọn --", new { @class = "form-control" })
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Loại Món Ăn</label>
+                @Html.DropDownListFor(m => m.MaLMA_id, new SelectList(listLoaiMonAn, "MaLMA", "TenLMA", Model.MaLMA_id), "-- Chọn --", new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label>Hình ảnh mới (nếu thay)</label>
+            <input type="file" name="HinhAnh" class="form-control" />
+            @if (!string.IsNullOrEmpty(Model.HinhAnh))
+            {
+                <p>Hiện tại: <img src="~/Assets/img/AnhMonAn/@Model.HinhAnh" height="80" /></p>
+            }
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Thông tin chính</label>
+            @Html.TextBoxFor(m => m.ThongTin, new { @class = "form-control" })
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mô tả món ăn</label>
+            @Html.TextAreaFor(m => m.MoTa, new { @class = "form-control" })
+        </div>
+
+        <h4 class="mt-4">Nguyên liệu sử dụng</h4>
+        <table class="table ChiTietSanPhams">
+            <tr class="trFirstChild" data-id="-1">
+                <td>Nguyên Liệu</td>
+                <td>Số Lượng Dùng</td>
+                <td>Trừ</td>
+                <td></td>
+            </tr>
+            @if (listCTSP != null && listCTSP.Any())
+            {
+                var i = 0;
+                foreach (var item in listCTSP)
+                {
+                    <tr class="trAppended" data-id="@i">
+                        <td>
+                            <select name="[@i].MaNguyenLieu_id" class="ddlNguyenLieuDung form-select">
+                                @foreach (var nl in listNguyenLieu)
+                                {
+                                    <option value="@nl.MaNguyenLieu" @(nl.MaNguyenLieu == item.MaNguyenLieu_id ? "selected" : "")>@nl.TenNguyenLieu</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" name="[@i].SoLuongDung" class="txtSoLuongDung form-control" value="@item.SoLuongDung" />
+                        </td>
+                        <td>
+                            <select name="[@i].Tru" class="selectTru form-select">
+                                <option value="0">Không Trừ</option>
+                                <option value="1">Trừ</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input class="btnXoa btn btn-danger" type="button" value="-" />
+                        </td>
+                    </tr>
+                    i++;
+                }
+            }
+        </table>
+
+        <input type="button" value="+" class="btn btn-outline-dark mb-3" id="btnThemNguyenLieu" />
+        <input type="submit" value="Cập Nhật" class="btn btn-primary" />
+        <a href="@Url.Action("DanhSachMonAn", "MonAn")" class="btn btn-secondary">Hủy</a>
+    }
+</div>
+
+<script>
+    $("#btnThemNguyenLieu").click(function () {
+        var id_cuoi = $(".ChiTietSanPhams").find("tr:last-child").attr("data-id");
+        i = parseInt(id_cuoi) + 1;
+        var nguyenLieuSelect = `
+            <tr class="trAppended" data-id="${i}">
+                <td>
+                    <select name="[${i}].MaNguyenLieu_id" class="ddlNguyenLieuDung form-select">
+                        @foreach (var item in listNguyenLieu)
+                        {
+                            <text><option value="@item.MaNguyenLieu">@item.TenNguyenLieu</option></text>
+                        }
+                    </select>
+                </td>
+                <td><input name="[${i}].SoLuongDung" class="txtSoLuongDung form-control" /></td>
+                <td>
+                    <select name="[${i}].Tru" class="selectTru form-select">
+                        <option value="0">Không Trừ</option>
+                        <option value="1">Trừ</option>
+                    </select>
+                </td>
+                <td><input class="btnXoa btn btn-danger" type="button" value="-" /></td>
+            </tr>
+        `;
+        $(".ChiTietSanPhams").append(nguyenLieuSelect);
+    });
+
+    $("body").on("click", ".btnXoa", function () {
+        $(this).closest(".trAppended").remove();
+    });
+</script>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<QuanLyNhaHang.Models.NguyenLieu>
+
+@{
+    ViewBag.Title = "Danh Sách Nguyên Liệu";
+    Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+}
+
+<h2 class="text-center mt-4 mb-4">Danh Sách Nguyên Liệu</h2>
+
+<div class="mb-3 text-end">
+    <a href="@Url.Action("ThemNguyenLieu", "NguyenLieu", new { area = "NhanVienKho" })" class="btn btn-success">
+        <i class="fa fa-plus"></i> Thêm Nguyên Liệu
+    </a>
+</div>
+
+<table class="table table-bordered table-striped table-hover">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>STT</th>
+            <th>Tên Nguyên Liệu</th>
+            <th>Loại Nguyên Liệu</th>
+            <th>Số Lượng Hiện Còn</th>
+            <th>Giá Nhập Cuối</th>
+            <th>Ghi Chú</th>
+            <th>Thao Tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var index = 1;
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">@index</td>
+                    <td>@item.TenNguyenLieu</td>
+                    <td>@item.LoaiNguyenLieu?.TenLNL</td>
+                    <td class="text-end">@item.SoLuongHienCon</td>
+                    <td class="text-end">@String.Format("{0:N0} đ", item.GiaNhapCuoi)</td>
+                    <td>@item.GhiChu</td>
+                    <td class="text-center">
+                        <a href="@Url.Action("XemChiTiet", "NguyenLieu", new { area = "NhanVienKho", id = item.MaNguyenLieu })" class="btn btn-primary btn-sm">Chi Tiết</a>
+                        <a href="@Url.Action("CapNhatNguyenLieu", "NguyenLieu", new { area = "NhanVienKho", id = item.MaNguyenLieu })" class="btn btn-warning btn-sm">Sửa</a>
+                        <a href="@Url.Action("XoaNguyenLieu", "NguyenLieu", new { area = "NhanVienKho", id = item.MaNguyenLieu })" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xóa nguyên liệu này?')">Xóa</a>
+                    </td>
+                </tr>
+                index++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center text-danger">Không có nguyên liệu nào trong hệ thống.</td>
+            </tr>
+        }
+    </tbody>
+</table>
