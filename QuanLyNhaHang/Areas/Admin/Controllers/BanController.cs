@@ -63,13 +63,16 @@ namespace QuanLyNhaHang.Areas.Admin.Controllers
         [HttpPost]
         public ActionResult CapNhatBan(Ban Model)
         {
-            Ban ban = new Ban();
-            ban.TenBan = Model.TenBan;
-            ban.SoGhe = Model.SoGhe;
-            ban.Vip = Model.Vip;
-            ban.TinhTrang = 0;
-            ban.MaTang_id = Model.MaTang_id;
-            db.SaveChanges();
+            var ban = db.Bans.SingleOrDefault(b => b.MaBan == Model.MaBan);
+            if (ban != null)
+            {
+                ban.TenBan = Model.TenBan;
+                ban.SoGhe = Model.SoGhe;
+                ban.Vip = Model.Vip;
+                ban.TinhTrang = Model.TinhTrang;
+                ban.MaTang_id = Model.MaTang_id;
+                db.SaveChanges();
+            }
             return RedirectToAction("DanhSachBan", "Ban");
         }
         public ActionResult DanhSachBanTheoTang(int iMaTang)

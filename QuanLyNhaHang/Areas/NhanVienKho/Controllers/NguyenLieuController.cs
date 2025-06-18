@@ -26,14 +26,14 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
             return View(nl);
         }
 
-        // GET: NhanVienKho/NguyenLieu/ThemNguyenLieu
+        // GET
         public ActionResult ThemNguyenLieu()
         {
             ViewBag.LoaiNguyenLieu = new SelectList(db.LoaiNguyenLieus.ToList(), "MaLNL", "TenLNL");
             return View();
         }
 
-        // POST: NhanVienKho/NguyenLieu/ThemNguyenLieu
+        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ThemNguyenLieu(NguyenLieu model)
@@ -45,6 +45,7 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
                 db.SaveChanges();
                 return RedirectToAction("DSNguyenLieu");
             }
+
             ViewBag.LoaiNguyenLieu = new SelectList(db.LoaiNguyenLieus.ToList(), "MaLNL", "TenLNL", model.MaLNL_id);
             return View(model);
         }

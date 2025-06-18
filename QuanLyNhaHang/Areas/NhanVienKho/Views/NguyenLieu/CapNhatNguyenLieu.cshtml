@@ -37,8 +37,12 @@
     </div>
 
     <div class="form-group mb-3">
-        @Html.Label("Loại nguyên liệu")
-        @Html.DropDownList("MaLNL_id", new SelectList(ViewBag.LoaiNguyenLieu as IEnumerable<QuanLyNhaHang.Models.LoaiNguyenLieu>, "MaLNL", "TenLNL", Model.MaLNL_id), "-- Chọn loại --", new { @class = "form-control" })
+        @Html.LabelFor(model => model.MaLNL_id)
+        @Html.DropDownListFor(model => model.MaLNL_id,
+            (SelectList)ViewBag.LoaiNguyenLieu,
+            "-- Chọn loại --",
+            new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.MaLNL_id, "", new { @class = "text-danger" })
     </div>
 
     <button type="submit" class="btn btn-primary">Lưu thay đổi</button>

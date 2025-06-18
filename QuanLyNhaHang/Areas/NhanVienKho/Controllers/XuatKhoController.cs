@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using System.Data.Entity; // dành cho Entity Framework 6
+
 
 namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
 {
@@ -13,9 +15,14 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
         // GET: NhanVienKho/XuatKho/DSXuatKho
         public ActionResult DSXuatKho()
         {
-            var danhSachXuatKho = db.XuatKhoes.OrderByDescending(x => x.NgayXuat).ToList();
-            return View(danhSachXuatKho);
+            var danhSach = db.XuatKhoes
+                .Include(x => x.NguyenLieuXuats)
+                .OrderByDescending(x => x.NgayXuat)
+                .ToList();
+
+            return View(danhSach);
         }
+
 
         // GET: NhanVienKho/XuatKho/XemChiTiet/5
         public ActionResult XemChiTiet(int id)
@@ -27,17 +34,13 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
             }
 
             var danhSachNguyenLieu = db.NguyenLieuXuats
+                                        .Include("NguyenLieu")
                                         .Where(x => x.MaXuatKho_id == id)
-                                        .Select(x => new
-                                        {
-                                            x.MaNguyenLieu_id,
-                                            x.NguyenLieu.TenNguyenLieu,
-                                            x.SoLuongXuat,                                          
-                                        })
                                         .ToList();
 
-            ViewBag.DanhSachNguyenLieu = danhSachNguyenLieu;
-            return View(dotXuat);
+            ViewBag.MaXuatKho = id;
+            return View(danhSachNguyenLieu);
         }
+
     }
 }

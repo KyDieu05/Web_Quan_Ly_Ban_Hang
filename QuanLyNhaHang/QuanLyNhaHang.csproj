@@ -403,7 +403,6 @@
     <Content Include="Areas\NhanVienKho\Views\HoaDon\DSHoaDonMoiTao.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\HoaDon\ThongTinHoaDon.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\HoaDon\ThongTinHoaDonMonAn.cshtml" />
-    <Content Include="Areas\NhanVienKho\Views\HoaDon\XoaHoaDons.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\Home\Ban.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\Home\Index.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\Home\Par_Tang.cshtml" />
@@ -411,7 +410,6 @@
     <Content Include="Areas\NhanVienKho\Views\MonAn\DanhSachMonAnBanChay.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\MonAn\DanhSachMonAnList.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\MonAn\DSMonAnCho.cshtml" />
-    <Content Include="Areas\NhanVienKho\Views\MonAn\ThemMonAn.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\MonAn\XemChiTiet.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\Shared\_LayoutNhanVienKho.cshtml" />
     <Content Include="Areas\NhanVienKho\Views\Tang\DanhSachTang.cshtml" />
@@ -472,6 +470,7 @@
     <Compile Include="Areas\NhanVienKho\Controllers\XuatKhoController.cs" />
     <Compile Include="Areas\NhanVienKho\Controllers\NhapKhoController.cs" />
     <Compile Include="Areas\NhanVienKho\NhanVienKhoAreaRegistration.cs" />
+    <Content Include=".gitignore" />
     <Compile Include="Models\ViewModels\PhieuXuatViewModel.cs" />
     <Compile Include="Models\ViewModels\PhieuNhapViewModel.cs" />
     <Compile Include="Models\ViewModels\MonAnChoViewModel.cs" />

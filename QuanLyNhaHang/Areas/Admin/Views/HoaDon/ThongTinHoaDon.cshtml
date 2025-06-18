@@ -123,6 +123,18 @@
                 <div class="card-body">
                     @if (ViewBag.SoLuongMonAn != 0)
                     {
+                        <div class="mb-2">
+                            @using (Html.BeginForm("XacNhan", "HoaDon", new { @iMaHoaDon = Model.MaHoaDon }, FormMethod.Post, new { @class = "mb-2" }))
+                            {
+                                <button class="btn btn-icon btn-icon-end btn-success w-100" type="submit">
+                                    <span>XÁC NHẬN</span>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="cs-icon cs-icon-check">
+                                        <path d="M5 10L9 14L15 6"></path>
+                                    </svg>
+                                </button>
+                            }
+                        </div>
+
                         using (Html.BeginForm("ThanhToan", "HoaDon", new { @iMaHoaDon = Model.MaHoaDon }))
                         {
                             <div class="mb-4">

@@ -22,20 +22,7 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="dropdown-menu dropdown-menu-end">
-        <!-- Đã Phục Vụ -->
-        <form method="post" action="@Url.Action("DieuHuong", "HoaDon", new { area = "NhanVienKho", iMaHoaDon = Model.MaHoaDon })" style="margin:0;">
-            <button type="submit" name="trangThai" value="2" class="dropdown-item">Đã Phục Vụ</button>
-        </form>
-
-        <!-- Thanh Toán -->
-        <form method="post" action="@Url.Action("ThanhToan", "HoaDon", new { area = "NhanVienKho", iMaHoaDon = Model.MaHoaDon })" style="margin:0;" onsubmit="return confirm('Xác nhận thanh toán?');">
-            <input type="hidden" name="txtGiamGiaVND" value="0" />
-            <input type="hidden" name="txtGiamGiaPhanTram" value="0" />
-            <button type="submit" class="dropdown-item text-danger">Thanh Toán</button>
-        </form>
-    </div>
+    </div>    
     <div class="row">
         <div class="col-12 col-lg order-1 order-lg-0">
             <h2 class="small-title">Món Đã Gọi</h2>

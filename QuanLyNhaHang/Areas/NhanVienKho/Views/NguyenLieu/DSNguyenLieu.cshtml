@@ -18,7 +18,6 @@
         <tr>
             <th>STT</th>
             <th>Tên Nguyên Liệu</th>
-            <th>Loại Nguyên Liệu</th>
             <th>Số Lượng Hiện Còn</th>
             <th>Giá Nhập Cuối</th>
             <th>Ghi Chú</th>
@@ -34,7 +33,6 @@
                 <tr>
                     <td class="text-center">@index</td>
                     <td>@item.TenNguyenLieu</td>
-                    <td>@item.LoaiNguyenLieu?.TenLNL</td>
                     <td class="text-end">@item.SoLuongHienCon</td>
                     <td class="text-end">@String.Format("{0:N0} đ", item.GiaNhapCuoi)</td>
                     <td>@item.GhiChu</td>

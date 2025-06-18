@@ -32,7 +32,7 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
         {
             ViewBag.TatCa = db.MonAns.Count();
             ViewBag.LoaiMonAn = db.LoaiMonAns.ToList();
-            var listMonAn = db.MonAns.Where(n => n.MaMonAn != 1 & n.MaMonAn != 10 && n.MaMonAn != 9).OrderBy(n => n.SoLuongDaBan).ToList().Take(10);
+            var listMonAn = db.MonAns.Where(n => n.MaMonAn != 1 && n.MaMonAn != 10 && n.MaMonAn != 9).OrderByDescending(n => n.SoLuongDaBan).ToList().Take(10);
             return View(listMonAn);
         }
 
