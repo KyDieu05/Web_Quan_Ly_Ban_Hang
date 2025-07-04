@@ -1,60 +1,47 @@
 ﻿@model QuanLyNhaHang.Models.PhieuNhap
-
 @{
-    ViewBag.Title = "Thêm phiếu nhập kho";
     Layout = "~/Areas/NhanVienKho/Views/Shared/_LayoutNhanVienKho.cshtml";
+    var nguyenLieuList = ViewBag.NguyenLieuList as IEnumerable<QuanLyNhaHang.Models.NguyenLieu>;
+    var nguyenLieuOptions = string.Join("", nguyenLieuList.Select(nl => $"<option value='{nl.MaNguyenLieu}'>{nl.TenNguyenLieu}</option>"));
 }
 
-<h2 class="mb-4">Thêm phiếu nhập kho</h2>
+<h2>Thêm phiếu nhập kho</h2>
 
-@using (Html.BeginForm("ThemPhieuNhap", "NhapKho", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("ThemPhieuNhap", "NhapKho", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
 
     <div class="form-group">
-        @Html.LabelFor(model => model.NgayNhap, "Ngày nhập")
-        @Html.TextBoxFor(model => model.NgayNhap, new { @class = "form-control", @type = "date" })
+        <label>Nhà cung cấp</label>
+        @Html.DropDownList("MaNCC_id", new SelectList(ViewBag.NhaCungCapList, "MaNCC", "TenNCC"), "-- Chọn --", new { @class = "form-control" })
     </div>
 
     <div class="form-group">
-        @Html.Label("Nhà cung cấp")
-        @Html.DropDownList("MaNCC_id", new SelectList(ViewBag.NhaCungCapList as IEnumerable<QuanLyNhaHang.Models.NhaCC>, "MaNCC", "TenNCC"), "-- Chọn nhà cung cấp --", new { @class = "form-control" })
+        <label>Nhân viên</label>
+        <input type="text" name="TaiKhoanNV_id" value="@ViewBag.TaiKhoanNV_id" class="form-control" readonly />
     </div>
 
-    <div class="form-group">
-        @Html.Label("Nhân viên nhập")
-        @Html.TextBox("TaiKhoanNV_id", ViewBag.TaiKhoanNV_id as string, new { @class = "form-control", @readonly = "readonly" })
-    </div>
-
-    <hr />
-    <h4>Chi tiết nguyên liệu nhập</h4>
-
+    <h4>Chi tiết nguyên liệu</h4>
     <div id="nguyenLieuContainer">
         <div class="row mb-2">
             <div class="col-md-4">
-                <label>Nguyên liệu</label>
                 <select name="ChiTietPhieuNhaps[0].MaNguyenLieu_id" class="form-control">
-                    @foreach (var item in ViewBag.NguyenLieuList as IEnumerable<QuanLyNhaHang.Models.NguyenLieu>)
-                    {
-                        <option value="@item.MaNguyenLieu">@item.TenNguyenLieu</option>
-                    }
+                    @Html.Raw(nguyenLieuOptions)
                 </select>
             </div>
             <div class="col-md-2">
-                <label>Số lượng</label>
-                <input type="number" name="ChiTietPhieuNhaps[0].SoLuongNhap" class="form-control" step="0.01" required />
+                <input type="number" name="ChiTietPhieuNhaps[0].SoLuongNhap" class="form-control" step="0.01" placeholder="Số lượng" />
             </div>
             <div class="col-md-2">
-                <label>Giá nhập</label>
-                <input type="number" name="ChiTietPhieuNhaps[0].GiaNhap" class="form-control" step="100" required />
+                <input type="number" name="ChiTietPhieuNhaps[0].GiaNhap" class="form-control" step="100" placeholder="Giá nhập" />
             </div>
         </div>
     </div>
 
-    <button type="button" class="btn btn-secondary mb-3" onclick="themDong()">+ Thêm nguyên liệu</button>
+    <button type="button" onclick="themDong()" class="btn btn-info">+ Thêm nguyên liệu</button>
 
-    <div class="form-group">
-        <input type="submit" value="Lưu phiếu nhập" class="btn btn-success" />
+    <div class="mt-3">
+        <input type="submit" class="btn btn-success" value="Lưu phiếu nhập" />
         <a href="@Url.Action("DSNhapKho", "NhapKho")" class="btn btn-secondary">Quay lại</a>
     </div>
 }
@@ -62,30 +49,26 @@
 @section Scripts {
     <script>
         let index = 1;
+        const optionHtml = `@Html.Raw(nguyenLieuOptions)`;
+
         function themDong() {
-            const container = document.getElementById('nguyenLieuContainer');
-            const newRow = document.createElement('div');
-            newRow.className = "row mb-2";
-            newRow.innerHTML = `
+            const container = document.getElementById("nguyenLieuContainer");
+            const row = document.createElement("div");
+            row.className = "row mb-2";
+            row.innerHTML = `
                 <div class="col-md-4">
                     <select name="ChiTietPhieuNhaps[${index}].MaNguyenLieu_id" class="form-control">
-                        ${@Html.Raw(string.Join("", (ViewBag.NguyenLieuList as IEnumerable<QuanLyNhaHang.Models.NguyenLieu>)
-                            .Select(nl => $"<option value='{nl.MaNguyenLieu}'>{nl.TenNguyenLieu}</option>")))}
+                        ${optionHtml}
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <input type="number" name="ChiTietPhieuNhaps[${index}].SoLuongNhap" class="form-control" step="0.01" required />
+                    <input type="number" name="ChiTietPhieuNhaps[${index}].SoLuongNhap" class="form-control" step="0.01" placeholder="Số lượng" />
                 </div>
                 <div class="col-md-2">
-                    <input type="number" name="ChiTietPhieuNhaps[${index}].GiaNhap" class="form-control" step="100" required />
-                </div>
-            `;
-            container.appendChild(newRow);
+                    <input type="number" name="ChiTietPhieuNhaps[${index}].GiaNhap" class="form-control" step="100" placeholder="Giá nhập" />
+                </div>`;
+            container.appendChild(row);
             index++;
         }
     </script>
 }
-@section Scripts {
-    <!-- Nếu bạn không có script gì, thì vẫn cần định nghĩa rỗng để tránh lỗi -->
-}
-

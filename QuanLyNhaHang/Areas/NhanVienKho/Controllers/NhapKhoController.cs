@@ -33,36 +33,51 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
 
             return View(phieu); // Truyền đúng kiểu PhieuNhap
         }
-
-
-        // GET: NhanVienKho/NhapKho/ThemPhieuNhap
-        // GET: NhanVienKho/NhapKho/ThemPhieuNhap
+        // GET
         public ActionResult ThemPhieuNhap()
         {
-            ViewBag.NhaCungCapList = db.NhaCCs.ToList(); // ✅ Phải đúng tên như View
-            ViewBag.NguyenLieuList = db.NguyenLieus.ToList(); // (nếu bạn dùng danh sách nguyên liệu)
-
-            return View();
+            ViewBag.NhaCungCapList = db.NhaCCs.ToList();
+            var nguyenLieuList = ViewBag.NguyenLieuList as IEnumerable<QuanLyNhaHang.Models.NguyenLieu> ?? new List<QuanLyNhaHang.Models.NguyenLieu>();
+            ViewBag.TaiKhoanNV_id = Session["TaiKhoanNV"];
+            return View(new PhieuNhap()); // tạo model rỗng
         }
-
-        // POST: NhanVienKho/NhapKho/ThemPhieuNhap
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult ThemPhieuNhap(PhieuNhap phieuNhap, List<ChiTietPhieuNhap> ChiTietPhieuNhaps)
         {
             if (ModelState.IsValid)
             {
+                // Lấy mã tài khoản từ session
+                var taiKhoanNV = Session["TaiKhoanNV"]?.ToString();
+                if (string.IsNullOrEmpty(taiKhoanNV))
+                {
+                    ModelState.AddModelError("", "Không xác định được tài khoản nhân viên đang đăng nhập.");
+                    return View(phieuNhap);
+                }
+
+                phieuNhap.TaiKhoanNV_id = taiKhoanNV;
                 phieuNhap.NgayNhap = DateTime.Now;
+
                 db.PhieuNhaps.Add(phieuNhap);
-                db.SaveChanges();
+                db.SaveChanges(); // Lưu để có MaPhieuNhap mới
+
+                // Nhóm các dòng nguyên liệu trùng theo MaNguyenLieu_id
+                var groupedChiTiet = ChiTietPhieuNhaps
+                    .GroupBy(ct => ct.MaNguyenLieu_id)
+                    .Select(g => new ChiTietPhieuNhap
+                    {
+                        MaNguyenLieu_id = g.Key,
+                        MaPhieuNhap_id = phieuNhap.MaPhieuNhap,
+                        SoLuongNhap = g.Sum(x => x.SoLuongNhap),
+                        GiaNhap = g.Last().GiaNhap, // hoặc lấy trung bình nếu bạn muốn
+                        ThanhTien = g.Sum(x => x.SoLuongNhap * x.GiaNhap)
+                    })
+                    .ToList();
 
                 double tongTien = 0;
-                foreach (var ct in ChiTietPhieuNhaps)
+                foreach (var ct in groupedChiTiet)
                 {
-                    ct.MaPhieuNhap_id = phieuNhap.MaPhieuNhap;
-                    ct.ThanhTien = ct.SoLuongNhap * ct.GiaNhap;
                     tongTien += ct.ThanhTien ?? 0;
-
                     db.ChiTietPhieuNhaps.Add(ct);
 
                     // Cập nhật tồn kho
@@ -80,11 +95,12 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
                 return RedirectToAction("DSNhapKho");
             }
 
-            ViewBag.NhaCC = new SelectList(db.NhaCCs.ToList(), "MaNCC", "TenNCC", phieuNhap.MaNCC_id);
-            ViewBag.NguyenLieu = db.NguyenLieus.ToList();
+            // Nếu ModelState không hợp lệ, load lại dropdown và hiển thị form
+            ViewBag.NhaCungCapList = db.NhaCCs.ToList();
+            var nguyenLieuList = ViewBag.NguyenLieuList as IEnumerable<QuanLyNhaHang.Models.NguyenLieu> ?? new List<QuanLyNhaHang.Models.NguyenLieu>();
+            ViewBag.TaiKhoanNV_id = Session["TaiKhoanNV"];
             return View(phieuNhap);
         }
-
 
         public ActionResult CapNhatPhieuNhap(int id)
         {

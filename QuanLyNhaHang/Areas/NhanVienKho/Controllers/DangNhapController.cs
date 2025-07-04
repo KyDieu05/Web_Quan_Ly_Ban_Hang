@@ -82,6 +82,8 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
                 Session["TaiKhoanKho"] = kh;
                 return Redirect("/NhanVienKho/Home/Index");
             }
+            // Sau khi đăng nhập thành công
+            Session["TaiKhoanNV"] = kh.TaiKhoanNV; // lưu lại mã tài khoản vào session
         }
         public ActionResult DangXuatNhanVien()
         {

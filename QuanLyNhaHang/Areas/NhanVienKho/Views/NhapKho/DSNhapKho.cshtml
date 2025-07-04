@@ -29,9 +29,9 @@
             {
                 <tr>
                     <td>@item.MaPhieuNhap</td>
-                    <td>@item.NgayNhap?.ToString("dd/MM/yyyy")</td>
-                    <td>@item.NhaCC?.TenNCC</td>
-                    <td>@item.NhanVien?.HoTen</td>
+                    <td>@(item.NgayNhap?.ToString("dd/MM/yyyy"))</td>
+                    <td>@(item.NhaCC?.TenNCC)</td>
+                    <td>@(item.NhanVien?.TenNhanVien)</td>
                     <td>@String.Format("{0:N0}", item.TongTien)</td>
                     <td>
                         <a href="@Url.Action("XemChiTiet", "NhapKho", new { id = item.MaPhieuNhap })" class="btn btn-info btn-sm">Xem</a>

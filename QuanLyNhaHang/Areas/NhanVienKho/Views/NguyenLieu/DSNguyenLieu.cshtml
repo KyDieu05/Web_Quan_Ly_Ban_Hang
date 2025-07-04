@@ -34,7 +34,7 @@
                     <td class="text-center">@index</td>
                     <td>@item.TenNguyenLieu</td>
                     <td class="text-end">@item.SoLuongHienCon</td>
-                    <td class="text-end">@String.Format("{0:N0} đ", item.GiaNhapCuoi)</td>
+                    <td class="text-end">@(String.Format("{0:N0} đ", item.GiaNhapCuoi))</td>
                     <td>@item.GhiChu</td>
                     <td class="text-center">
                         <a href="@Url.Action("XemChiTiet", "NguyenLieu", new { area = "NhanVienKho", id = item.MaNguyenLieu })" class="btn btn-primary btn-sm">Chi Tiết</a>

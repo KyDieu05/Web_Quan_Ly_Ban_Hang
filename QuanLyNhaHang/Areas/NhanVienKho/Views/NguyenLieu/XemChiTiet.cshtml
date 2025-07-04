@@ -20,10 +20,10 @@
             <dd class="col-sm-8">@Model.SoLuongHienCon</dd>
 
             <dt class="col-sm-4">Giá nhập cuối:</dt>
-            <dd class="col-sm-8">@Model.GiaNhapCuoi.ToString("N0") VND</dd>
+            <dd class="col-sm-8">@(Model.GiaNhapCuoi.ToString("N0")) VND</dd>
 
             <dt class="col-sm-4">Loại nguyên liệu:</dt>
-            <dd class="col-sm-8">@Model.LoaiNguyenLieu?.TenLNL</dd>
+            <dd class="col-sm-8">@(Model.LoaiNguyenLieu?.TenLNL)</dd>
 
             <dt class="col-sm-4">Ghi chú:</dt>
             <dd class="col-sm-8">@Model.GhiChu</dd>

@@ -25,21 +25,20 @@ namespace QuanLyNhaHang.Areas.NhanVienKho.Controllers
 
 
         // GET: NhanVienKho/XuatKho/XemChiTiet/5
-        public ActionResult XemChiTiet(int id)
+        public ActionResult XemChiTiet(int? id)
         {
-            var dotXuat = db.XuatKhoes.Find(id);
-            if (dotXuat == null)
-            {
+            if (id == null)
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+
+            var phieu = db.XuatKhoes.Find(id);
+            if (phieu == null)
                 return HttpNotFound();
-            }
 
-            var danhSachNguyenLieu = db.NguyenLieuXuats
-                                        .Include("NguyenLieu")
-                                        .Where(x => x.MaXuatKho_id == id)
-                                        .ToList();
+            var danhSach = db.NguyenLieuXuats
+                .Where(x => x.MaXuatKho_id == id)
+                .ToList();
 
-            ViewBag.MaXuatKho = id;
-            return View(danhSachNguyenLieu);
+            return View(danhSach);
         }
 
     }
