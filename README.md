@@ -1,10 +1,10 @@
 -ỨNG DỤNG WEBSITE QUẢN LÝ NHÀ HÀNG, ĐƯỢC PHÁT TRIỂN BỚI NHÓM CHD-
 
 CÁCH CHẠY:
-*CHUẨN BỊ MÔI TRƯỜNG:
+- CHUẨN BỊ MÔI TRƯỜNG:
 - Visual Studio
 - SQL Management Studio (2022)
-*CHẠY ỨNG DỤNG:
+- CHẠY ỨNG DỤNG:
 - B1: Clone toàn bộ dự án về máy.
 - B2: Mở chạy file SQL_Script trong thư mục Database bằng SQL Management Studio (2022).
 - B3: Mở file DoAn.sln trong thư mục dự án bằng Visual Studio.
